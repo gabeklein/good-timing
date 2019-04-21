@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "outDir": "lib/",
+        "target": "ESNext",
+        "moduleResolution": "node",
+        "noUnusedLocals": true,
+        "strict": true,
+        "esModuleInterop": true
+    },
+    "include": [
+        "src/*.ts"
+    ]
+  }
