@@ -112,6 +112,11 @@ declare function Atleast<T>(by: Amount, promise: Promise<T>) : Promise<T>
  */
 declare function Atleast<T>(by: Amount, exec: PromiseExecutor<T>) : Promise<T>
 
+interface AttemptHandler<T = any> {
+    try(task: PromiseExecutor<T>): Promise<T>
+    await(task: Promise<T>): Promise<T>
+}
+
 declare function Within(timeout: Amount): AttemptHandler;
 declare function Within(defer: Amount, timeout: Amount): AttemptHandler;
 declare function Within<T>(timeout: Amount, promise?: Promise<T>): Promise<T>

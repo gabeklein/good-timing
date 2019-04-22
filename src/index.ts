@@ -120,13 +120,11 @@ class AttemptHandler<T = any> {
         private t2: number
     ){}
 
-    try(promise: Promise<T>): Promise<T>
-    try(exec: PromiseExecutor<T>): Promise<T>
+    try(task: PromiseExecutor<T>){
+        return ClampTiming(this.t1, this.t2, new Promise(task))
+    }
 
-    try(task: Promise<T> | PromiseExecutor<T>){
-        if(typeof task == "function")
-            task = new Promise(task);
-
+    await(task: Promise<T>){
         return ClampTiming(this.t1, this.t2, task)
     }
 }
