@@ -97,7 +97,7 @@ declare function Defer(by: Amount): ThenDeferHandler
  * @returns Promise resolving same value as `promise`.
  * 
  */
-declare function Defer<T>(by: Amount, promise: Promise<T>) : Promise<T>
+declare function Atleast<T>(by: Amount, promise: Promise<T>) : Promise<T>
 
 /**
  * New promise resolving callback only after specified time.
@@ -110,7 +110,7 @@ declare function Defer<T>(by: Amount, promise: Promise<T>) : Promise<T>
  * @returns Promise resolving to value resolved by `callback`, only after `time` elapsed.
  * 
  */
-declare function Defer<T>(by: Amount, exec: PromiseExecutor<T>) : Promise<T>
+declare function Atleast<T>(by: Amount, exec: PromiseExecutor<T>) : Promise<T>
 
 declare function Within(timeout: Amount): AttemptHandler;
 declare function Within(defer: Amount, timeout: Amount): AttemptHandler;

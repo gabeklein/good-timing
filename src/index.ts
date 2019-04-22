@@ -38,20 +38,16 @@ function Sleep(
 
 type ThenDeferHandler = <T>(value: T) => Promise<T>;
 
-function Deferral(duration: Amount): ThenDeferHandler {
-    return (resolution) => Sleep(duration).then(() => resolution)
+function Defer(time: Amount): ThenDeferHandler {
+    return (resolution) => Sleep(time).then(() => resolution)
 }
 
-function Defer(by: Amount): ThenDeferHandler
-function Defer<T>(by: Amount, promise: Promise<T>) : Promise<T>
-function Defer<T>(by: Amount, exec: PromiseExecutor<T>) : Promise<T>
+function Atleast<T>(by: Amount, promise: Promise<T>) : Promise<T>
+function Atleast<T>(by: Amount, exec: PromiseExecutor<T>) : Promise<T>
 
-function Defer<T>(
+function Atleast<T>(
     duration: Amount, 
-    deferred?: Promise<T> | PromiseExecutor<T>){
-
-    if(!deferred)
-        return Deferral(duration)
+    deferred: Promise<T> | PromiseExecutor<T>){
 
     if(typeof deferred == "function")
         deferred = new Promise(deferred)
@@ -81,7 +77,7 @@ function ClampTiming<T>(
         )
     ])
     
-    return atleast && Defer(atleast, race) || race;
+    return atleast && Atleast(atleast, race) || race;
 }
 
 function Within(timeout: Amount): AttemptHandler;
@@ -188,4 +184,4 @@ class Timer extends Promise<void> {
     }
 }
 
-export { Within, Sleep, Defer, Timer, TimeIn };
+export { Within, Sleep, Atleast, Defer, Timer, TimeIn };
