@@ -1,13 +1,14 @@
 const UNIT = new class {
     [unit: string]: number;
 
-    constructor(){
-        (this.days = 24 *
-        (this.hours = 60 *
-        (this.minutes = 60 *
-        (this.seconds = 1000 *
-        (this.ms = 1
-    )))))}
+    ms      = 1;
+    seconds = 1000;
+    minutes = 60 * this.seconds;
+    hours   = 60 * this.minutes;
+    hrs     =      this.hours;
+    days    = 24 * this.hours;
+    weeks   = 7  * this.days;
+    wks     =      this.weeks;
 }
 
 interface TimeDefinition {
@@ -23,11 +24,16 @@ interface TimeDefinition {
     minute?: number;
     minutes?: number;
 
+    hr?: number;
     hour?: number;
     hours?: number;
 
     day?: number;
     days?: number;
+
+    wk?: number;
+    week?: number;
+    weeks?: number;
 }
 
 export type Amount = number | TimeDefinition;

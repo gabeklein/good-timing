@@ -21,11 +21,16 @@ interface TimeDefinition {
     minute?: number;
     minutes?: number;
 
+    hr?: number;
     hour?: number;
     hours?: number;
 
     day?: number;
     days?: number;
+
+    wk?: number;
+    week?: number;
+    weeks?: number;
 }
 
 /**
