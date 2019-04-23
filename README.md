@@ -9,10 +9,11 @@
  
 <p align="center">
   <a href="https://www.npmjs.com/package/good-timing"><img alt="NPM" src="https://img.shields.io/npm/v/good-timing.svg"></a>
-  <a href=""><img alt="Build" src="https://badges.frapsoft.com/typescript/version/typescript-next.svg?v=101"></a>
+  <a href=""><img alt="Build" src="https://shields-staging.herokuapp.com/npm/types/good-timing.svg"></a>
 </p>
 
 ## Quick Start
+
 <br />
 
 > Install with preferred package manager
@@ -24,12 +25,12 @@ npm install --save good-timing
 > Import what you need
 
 ```js
-import { TimeIn, Sleep, Atleast, Defer, Within, Timer } from "good-timing";
+import { TimeIn, Between, Sleep, Atleast, Defer, Within, Timer } from "good-timing";
 ```
 
 <br/>
 
-> Remember to ⭐️if this helps!
+> Remember to ⭐️ if this helps your project!
 
 <br/>
 <br/>
@@ -78,7 +79,7 @@ A function containing asyncronous operation.
 
 ###  Promisable
 
-Refers to anywhere `PromiseExecutor` or `Promise` are interchangeable.
+Refers to anywhere `Promise` or `PromiseExecutor` are interchangeable.
 
 <br/>
 <br/>
@@ -98,9 +99,12 @@ Each of the exposed helper functions have overloads which tailor them to your sp
 Converts `TimeDefintion` to `number` of seconds. Easy!
 
 ```js
-const milliseconds = TimeIn({ 15: minutes });
+const milliseconds = TimeIn({ minutes: 15 });
 // 900000
 ```
+
+> Note: *This (or a sourced variable) can be used in place of any `Amount`, as it just returns a number of milliseconds.*
+
 <br/>
 
 ## Sleep
@@ -116,8 +120,8 @@ More or less equivalent to `setTimeout`
 const howLongWasThat = await Sleep({ seconds: 12 });
 // Twelve suspense filled seconds later...
 
-howLongWasThat === 12000
-// true
+howLongWasThat;
+// 12000
 ```
 
 <br/>
@@ -128,11 +132,11 @@ howLongWasThat === 12000
 
 ```js
 Sleep({ minute: 1 }, () => { 
-    alert("Hello to the future!") 
+    console.log("Hello to the future!") 
 });
 
 // One minute later...
-// A hello from the not to distant past! o_o Truly amazing.
+// A hello from the not too distant past! Truly amazing.
 ```
 
 <br/>
@@ -141,24 +145,27 @@ Sleep({ minute: 1 }, () => {
 
 Useful where you want to ensure whatever you're waiting for takes a minimum amount of time.
 
-> Useful in situations where an operation may sometimes finish "too fast". If showing an animation while loading, for instance, it may be less-than-ideal for that animation to terminate before completing first cycle. <br/><br/> `Atleast()` gives you the ability to set the minimum time such a loading state should remain on screen, making time-of-flight feel more consistent.
+> Useful in situations where an operation may sometimes finish "too fast". If showing an animation while loading, for instance, it may be less-than-ideal for that animation to terminate before completing its first cycle. <br/><br/> `Atleast()` gives you the ability to set for how long that loading state should remain on screen, making time-of-flight feel more consistent.
 
 </br>
 
 <code>&nbsp;<b>Atleast</b>(time: <b><i>Amount</i></b>, promise: <b><i>Promise\<T\></i></b>): <b><i>Promise\<T\></i></b>&nbsp;</code>
 
 *Resolve a promise only after specified time.*
-*Will resolve as original promise does or timeout elapses, whichever is later.*
+*Will resolve as original promise does or after `time` elapses, whichever is later.*
 
 ```js
-const justASec = Sleep({ sec: 1 });
+const { log } = console;
+const justASec = Sleep({ sec: 1 })
 const justAMinute = Sleep({ min: 1 })
 
-alert(await Atleast({ seconds: 30 }, justASec))
-// 1000 (after 30 seconds, deferral was longer.)
+log(await Atleast({ seconds: 30 }, justASec))
+// 30 seconds later... (deferral was longer)
+// > 1000 
 
-alert(await Atleast({ seconds: 30 }, justAMinute))
-// 60000 (after 1 minute, original was longer.)
+log(await Atleast({ seconds: 30 }, justAMinute))
+// 1 minute later... (original was longer)
+// > 60000
 ```
 
 <br/>
@@ -199,11 +206,73 @@ async function HelloLater(to: string){
 HelloLater("World")
     .then(Defer({ sec: 5 }))
     .then(salutation => {
-        alert(salutation)
+        console.log(salutation)
     });
 
 // 10 seconds later...
-// Hello!
+// > Hello!
+```
+
+<br/>
+
+## Within
+
+Returns a `Promise` which only resolves if timeout is not reached, will reject instead if timeout is reached.
+
+> Useful to enforce a timeout on `Promisable` asyncronous operation.
+
+</br>
+
+<code>&nbsp;<b>Within</b>(timeout: <b><i>Amount</i></b>, awaiting: <b><i>Promisable</i></b>): <b>Promise\<<i>T</i>\></b></b>&nbsp;</code>
+
+*This function takes `awaiting` and resovlves as normal, so long `timeout` is not reached.* 
+
+> If timeout elapses, output Promise will reject with the message `"Timeout: {number}ms"`;
+
+```js
+async function HelloLater(to: string){
+    await Sleep({ sec: 30 });
+    return `Hello, ${to}!`
+}
+
+await Within({ sec: 29 }, HelloLater)
+    .catch(e => console.error(e))
+
+// 29 seconds later...
+// > "Timeout: 29000ms"
+
+await Within({ sec: 31 }, HelloLater)
+    .catch(e => console.log(e))
+
+// 10 seconds later...
+// > 30000
+```
+
+</br>
+
+<code>&nbsp;<b>Within</b>(defer: <b><i>Amount</i></b>, timeout: <b><i>Amount</i></b>, awaiting: <b><i>Promisable</i></b>): <b>Promise\<<i>T</i>\></b></b>&nbsp;</code>
+
+*Resolves `awaiting` only after `defer` has elapsed, but only if `timeout` has not.* 
+
+> Behaves exactly as `Atleast(defer, Within(timeout, awaiting))`
+
+```js
+async function littleOverAMinute(){
+    await Sleep({ sec: 61 });
+    return "foobar"
+}
+
+await Within({ sec: 35 }, { sec: 60 }, littleOverAMinute)
+    .catch(e => console.error(e))
+
+// 60 seconds later...
+// > "Timeout: 60000ms"
+
+await Within({ sec: 31 })
+    .catch(e => console.log(e))
+
+// 35 seconds later...
+// > 35000
 ```
 
 <br/>
