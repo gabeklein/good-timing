@@ -72,6 +72,8 @@ declare function Sleep<CallbackArguments extends any[]>(
     ...args: CallbackArguments
 ): void;
 
+type ThenDeferHandler = <T>(value: T) => Promise<T>;
+
 /**
  * Defer (inline) promise's resolution by specified time.
  * 
