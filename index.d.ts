@@ -43,7 +43,7 @@ interface TimeDefinition {
  * @returns milliseconds. Corresponds to amount represented by `time`.
  * 
  */
-declare function TimeIn(time: TimeDefinition): number;
+declare function timeIn(time: TimeDefinition): number;
 
 /**
  * Sleep for given amount of time.
@@ -55,7 +55,7 @@ declare function TimeIn(time: TimeDefinition): number;
  * @returns Promise, resolving after elapsed time. Resolves number of milliseconds timeout waited for.
  * 
  */
-declare function Sleep(
+declare function sleep(
     duration: Amount
 ): Promise<number>;
 
@@ -66,7 +66,7 @@ declare function Sleep(
  * @param callback Function to run after elapsed.
  * @param args... all arguments after callback are passed to callback
  */
-declare function Sleep<CallbackArguments extends any[]>(
+declare function sleep<CallbackArguments extends any[]>(
     duration: Amount, 
     callback: (...args: CallbackArguments) => any, 
     ...args: CallbackArguments
@@ -77,7 +77,7 @@ type ThenDeferHandler = <T>(value: T) => Promise<T>;
 /**
  * Defer (inline) promise's resolution by specified time.
  * 
- * EXAMPLE: `Promise.then(Defer(time))` 
+ * EXAMPLE: `Promise.then(defer(time))` 
  * 
  * Will return a function which captures resolved value of previous promise and re-resolves it after set interval.
  * 
@@ -86,7 +86,7 @@ type ThenDeferHandler = <T>(value: T) => Promise<T>;
  * @returns `Promise.then()` handler. 
  * 
  */
-declare function Defer(by: Amount): ThenDeferHandler
+declare function defer(by: Amount): ThenDeferHandler
 
 /**
  * Defer promise's resolution by specified time.
@@ -99,7 +99,7 @@ declare function Defer(by: Amount): ThenDeferHandler
  * @returns Promise resolving same value as `promise`.
  * 
  */
-declare function Atleast<T>(by: Amount, promise: Promise<T>) : Promise<T>
+declare function atleast<T>(by: Amount, promise: Promise<T>) : Promise<T>
 
 /**
  * New promise resolving callback only after specified time.
@@ -112,19 +112,19 @@ declare function Atleast<T>(by: Amount, promise: Promise<T>) : Promise<T>
  * @returns Promise resolving to value resolved by `callback`, only after `time` elapsed.
  * 
  */
-declare function Atleast<T>(by: Amount, exec: PromiseExecutor<T>) : Promise<T>
+declare function atleast<T>(by: Amount, exec: PromiseExecutor<T>) : Promise<T>
 
 interface AttemptHandler<T = any> {
     try(task: PromiseExecutor<T>): Promise<T>
     await(task: Promise<T>): Promise<T>
 }
 
-declare function Within(timeout: Amount): AttemptHandler;
-declare function Within(defer: Amount, timeout: Amount): AttemptHandler;
-declare function Within<T>(timeout: Amount, promise?: Promise<T>): Promise<T>
-declare function Within<T>(timeout: Amount, exec?: PromiseExecutor<T>): Promise<T>
-declare function Within<T>(defer: Amount, timeout?: Amount, promise?: Promise<T>): Promise<T>
-declare function Within<T>(defer: Amount, timeout?: Amount, exec?: PromiseExecutor<T>): Promise<T>
+declare function within(timeout: Amount): AttemptHandler;
+declare function within(defer: Amount, timeout: Amount): AttemptHandler;
+declare function within<T>(timeout: Amount, promise?: Promise<T>): Promise<T>
+declare function within<T>(timeout: Amount, exec?: PromiseExecutor<T>): Promise<T>
+declare function within<T>(defer: Amount, timeout?: Amount, promise?: Promise<T>): Promise<T>
+declare function within<T>(defer: Amount, timeout?: Amount, exec?: PromiseExecutor<T>): Promise<T>
 
 declare class Timer extends Promise<void> {
     cancel: () => number;
@@ -136,9 +136,9 @@ declare class Timer extends Promise<void> {
 }
 
 export {
-    TimeIn,
-    Sleep,
-    Defer,
-    Within,
+    timeIn,
+    sleep,
+    defer,
+    within,
     Timer
 }
