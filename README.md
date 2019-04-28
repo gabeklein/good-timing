@@ -143,7 +143,7 @@ Sleep({ minute: 1 }, () => {
 
 Useful where you want to ensure whatever you're waiting for takes a minimum amount of time.
 
-> Useful in situations where an operation may sometimes finish "too fast". If showing an animation while loading, for instance, it may be less-than-ideal for that animation to terminate before completing its first cycle. <br/><br/> `Atleast()` gives you the ability to set for how long that loading state should remain on screen, making time-of-flight feel more consistent.
+> Useful in situations where an operation may sometimes finish "too fast". If showing an animation while loading, for instance, it may be less-than-ideal for that animation to terminate before completing its first cycle. <br/><br/> `Atleast()` would give you the ability to set for how long that loading state should remain on screen, making time-of-flight feel more consistent.
 
 </br>
 
@@ -221,7 +221,7 @@ Returns a `Promise` which only resolves if timeout is not reached, will reject i
 
 </br>
 
-<code>&nbsp;<b>Within</b>(timeout: <b><i>Amount</i></b>, awaiting: <b><i>Promisable</i></b>): <b>Promise\<<i>T</i>\></b></b>&nbsp;</code>
+<code>&nbsp;<b>Within</b>(timeout: <b><i>Amount</i></b>, awaiting: <b><i>Promisable\<<i>T</i>\></i></b>): <b>Promise\<<i>T</i>\></b></b>&nbsp;</code>
 
 *This function takes `awaiting` and resovlves as normal, so long `timeout` is not reached.* 
 
@@ -242,13 +242,13 @@ await Within({ sec: 29 }, HelloLater)
 await Within({ sec: 31 }, HelloLater)
     .catch(e => console.log(e))
 
-// 10 seconds later...
+// 30 seconds later...
 // > 30000
 ```
 
 </br>
 
-<code>&nbsp;<b>Within</b>(defer: <b><i>Amount</i></b>, timeout: <b><i>Amount</i></b>, awaiting: <b><i>Promisable</i></b>): <b>Promise\<<i>T</i>\></b></b>&nbsp;</code>
+<code>&nbsp;<b>Within</b>(defer: <b><i>Amount</i></b>, timeout: <b><i>Amount</i></b>, awaiting: <b><i>Promisable\<<i>T</i>\></i></b>): <b>Promise\<<i>T</i>\></b></b>&nbsp;</code>
 
 *Resolves `awaiting` only after `defer` has elapsed, but only if `timeout` has not.* 
 
