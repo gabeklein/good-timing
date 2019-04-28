@@ -217,7 +217,7 @@ await Within({ sec: 29 }, HelloLater)
 // > "Timeout: 29000ms"
 
 await Within({ sec: 31 }, HelloLater)
-    .catch(e => console.log(e))
+    .then(e => console.log(e))
 
 // 30 seconds later...
 // > 30000
