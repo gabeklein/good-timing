@@ -24,7 +24,7 @@ npm install --save good-timing
 > Import what you need
 
 ```js
-import { TimeIn, Between, Sleep, Atleast, Defer, Within } from "good-timing";
+import { TimeIn, Sleep, Atleast, Defer, Within } from "good-timing";
 ```
 
 <br/>
@@ -32,16 +32,10 @@ import { TimeIn, Between, Sleep, Atleast, Defer, Within } from "good-timing";
 > Remember to ⭐️ if this helps your project!
 
 <br/>
-<br/>
 
-## Types
+## TimeDefintion
 
-Common data types encontered in API.
-
-
-<br/>
-
-###  TimeDefintion
+This package's central gimick. 
 
 While all helpers can accept a number of milliseconds, a better way to define duration is via the `TimeDefintion` interface. It is simply an object containing any combination of the following keys.
 
@@ -59,32 +53,15 @@ While all helpers can accept a number of milliseconds, a better way to define du
  
 - `{ hr: 2, sec: 50 }` => `7250000ms`
 
-<br/>
+- `{ second: 1, ms: 500 }` => `1500ms`
 
-###  PromiseExecutor
-
-A function containing asyncronous operation. 
-> Equivalent to that consumed by `new Promise()`
-
-<code>&nbsp;(resolve: <b><i>(value) => void</i></b>), reject: <b><i>(reason) => void)</i></b>: <b><i>void</i></b>&nbsp;</code>
-
-<br/>
-
-###  Amount
-Refers to anywhere `TimeDefinition` or `number` of milliseconds where interchangeable.
-
-<br/>
-
-###  Promisable
-
-Refers to anywhere `Promise` or `PromiseExecutor` are interchangeable.
-
-<br/>
 <br/>
 
 # API
 
 Each of the exposed helper functions have overloads which tailor them to your specific use case. 
+
+Signatures are in typescript, everything in **`Bold`** is a type, of which package-specific ones are referenced above, as well as in the [Types Section](#Types).
 
 <br/>
 
@@ -272,6 +249,33 @@ await Within({ sec: 31 })
 // 35 seconds later...
 // > 35000
 ```
+
+<br/>
+<br/>
+
+# Other Types
+
+More data types encontered in API.
+
+<br/>
+
+###  PromiseExecutor
+
+A function containing asyncronous operation. 
+> Equivalent to that consumed by `new Promise()`
+
+<code>&nbsp;(resolve: <b><i>(value) => void</i></b>), reject: <b><i>(reason) => void)</i></b>: <b><i>void</i></b>&nbsp;</code>
+
+<br/>
+
+###  Amount
+Refers to anywhere `TimeDefinition` or `number` of milliseconds where interchangeable.
+
+<br/>
+
+###  Promisable
+
+Refers to anywhere `Promise` or `PromiseExecutor` are interchangeable.
 
 <br/>
 <br/>
