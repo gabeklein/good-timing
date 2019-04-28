@@ -24,7 +24,7 @@ npm install --save good-timing
 > Import what you need
 
 ```js
-import { TimeIn, Sleep, Atleast, Defer, Within } from "good-timing";
+import { timeIn, sleep, atleast, defer, within } from "good-timing";
 ```
 
 <br/>
@@ -65,16 +65,16 @@ Signatures are in typescript, everything in **`Bold`** is a type, of which packa
 
 <br/>
 
-## TimeIn
+## timeIn
 
 <br/>
 
-<code>&nbsp;<b>TimeIn</b>(time: <b><i>TimeDefintion</i></b>): <b><i>number</i></b>&nbsp;</code>
+<code>&nbsp;<b>timeIn</b>(time: <b><i>TimeDefintion</i></b>): <b><i>number</i></b>&nbsp;</code>
 
 Converts `TimeDefintion` to `number` of seconds. Easy!
 
 ```js
-const milliseconds = TimeIn({ minutes: 15 });
+const milliseconds = timeIn({ minutes: 15 });
 // 900000
 ```
 
@@ -82,17 +82,17 @@ const milliseconds = TimeIn({ minutes: 15 });
 
 <br/>
 
-## Sleep
+## sleep
 More or less equivalent to `setTimeout`
 
 <br/>
 
-<code>&nbsp;<b>Sleep</b>(time: <b><i>Amount</i></b>): <b><i>Promise\<number\></i></b>&nbsp;</code>
+<code>&nbsp;<b>sleep</b>(time: <b><i>Amount</i></b>): <b><i>Promise\<number\></i></b>&nbsp;</code>
 
 *Return a promise which waits specified time. Resolves to number of milliseconds elapsed.*
 
 ```js
-const howLongWasThat = await Sleep({ seconds: 12 });
+const howLongWasThat = await sleep({ seconds: 12 });
 // Twelve suspense filled seconds later...
 
 howLongWasThat;
@@ -101,12 +101,12 @@ howLongWasThat;
 
 <br/>
 
-<code>&nbsp;<b>Sleep</b>(time: <b><i>Amount</i></b>, callback: <b><i>Function</i></b>): <b><i>void</i></b>&nbsp;</code>
+<code>&nbsp;<b>sleep</b>(time: <b><i>Amount</i></b>, callback: <b><i>Function</i></b>): <b><i>void</i></b>&nbsp;</code>
 
 *Run a callback after specified time.*
 
 ```js
-Sleep({ minute: 1 }, () => { 
+sleep({ minute: 1 }, () => { 
     console.log("Hello to the future!") 
 });
 
@@ -116,41 +116,41 @@ Sleep({ minute: 1 }, () => {
 
 <br/>
 
-## Atleast
+## atleast
 
 Useful where you want to ensure whatever you're waiting for takes a minimum amount of time.
 
-> Useful in situations where an operation may sometimes finish "too fast". If showing an animation while loading, for instance, it may be less-than-ideal for that animation to terminate before completing its first cycle. <br/><br/> `Atleast()` would give you the ability to set for how long that loading state should remain on screen, making time-of-flight feel more consistent.
+> Useful in situations where an operation may sometimes finish "too fast". If showing an animation while loading, for instance, it may be less-than-ideal for that animation to terminate before completing its first cycle. <br/><br/> `atleast()` would give you the ability to set for how long that loading state should remain on screen, making time-of-flight feel more consistent.
 
 </br>
 
-<code>&nbsp;<b>Atleast</b>(time: <b><i>Amount</i></b>, promise: <b><i>Promise\<T\></i></b>): <b><i>Promise\<T\></i></b>&nbsp;</code>
+<code>&nbsp;<b>atleast</b>(time: <b><i>Amount</i></b>, promise: <b><i>Promise\<T\></i></b>): <b><i>Promise\<T\></i></b>&nbsp;</code>
 
 *Resolve a promise only after specified time.*
 *Will resolve as original promise does or after `time` elapses, whichever is later.*
 
 ```js
 const { log } = console;
-const justASec = Sleep({ sec: 1 })
-const justAMinute = Sleep({ min: 1 })
+const justASec = sleep({ sec: 1 })
+const justAMinute = sleep({ min: 1 })
 
-log(await Atleast({ seconds: 30 }, justASec))
+log(await atleast({ seconds: 30 }, justASec))
 // 30 seconds later... (deferral was longer)
 // > 1000 
 
-log(await Atleast({ seconds: 30 }, justAMinute))
+log(await atleast({ seconds: 30 }, justAMinute))
 // 1 minute later... (original was longer)
 // > 60000
 ```
 
 <br/>
 
-<code>&nbsp;<b>Atleast</b>(time: <b><i>Amount</i></b>, executor: <b>(resolve, reject) => void</b>): <b><i>Promise\<Value\></i></b>&nbsp;</code>
+<code>&nbsp;<b>atleast</b>(time: <b><i>Amount</i></b>, executor: <b>(resolve, reject) => void</b>): <b><i>Promise\<Value\></i></b>&nbsp;</code>
 
 *Run function and return Promise resolving the async result. Will only resolve after `time` has elapsed.* <br/> *More or less equivalent to `new Promise()` but deferred.*
 
 ```js
-await foo = Atleast({ minute: 1 }, (resolve, reject) => { 
+await foo = atleast({ minute: 1 }, (resolve, reject) => { 
     setTimeout(() => resolve("bar"), 500)
 });
 
@@ -160,13 +160,13 @@ await foo = Atleast({ minute: 1 }, (resolve, reject) => {
 
 <br/>
 
-## Defer
+## defer
 
 Delays the resolution of a promise by set time.
 
 </br>
 
-<code>&nbsp;<b>Defer</b>(time: <b><i>Amount</i></b>): <b>(value: T) => Promise\<T\></b></b>&nbsp;</code>
+<code>&nbsp;<b>defer</b>(time: <b><i>Amount</i></b>): <b>(value: T) => Promise\<T\></b></b>&nbsp;</code>
 
 *This function **will add** the amount of time specified, on top of existing time taken.* 
 
@@ -174,12 +174,12 @@ Delays the resolution of a promise by set time.
 
 ```js
 async function HelloLater(to: string){
-    await Sleep({ sec: 5 });
+    await sleep({ sec: 5 });
     return `Hello, ${to}!`
 }
 
 HelloLater("World")
-    .then(Defer({ sec: 5 }))
+    .then(defer({ sec: 5 }))
     .then(salutation => {
         console.log(salutation)
     });
@@ -190,7 +190,7 @@ HelloLater("World")
 
 <br/>
 
-## Within
+## within
 
 Returns a `Promise` which only resolves if timeout is not reached, will reject instead if timeout is reached.
 
@@ -198,7 +198,7 @@ Returns a `Promise` which only resolves if timeout is not reached, will reject i
 
 </br>
 
-<code>&nbsp;<b>Within</b>(timeout: <b><i>Amount</i></b>, awaiting: <b><i>Promisable\<<i>T</i>\></i></b>): <b>Promise\<<i>T</i>\></b></b>&nbsp;</code>
+<code>&nbsp;<b>within</b>(timeout: <b><i>Amount</i></b>, awaiting: <b><i>Promisable\<<i>T</i>\></i></b>): <b>Promise\<<i>T</i>\></b></b>&nbsp;</code>
 
 *This function takes `awaiting` and resovlves as normal, so long `timeout` is not reached.* 
 
@@ -206,17 +206,17 @@ Returns a `Promise` which only resolves if timeout is not reached, will reject i
 
 ```js
 async function HelloLater(to: string){
-    await Sleep({ sec: 30 });
+    await sleep({ sec: 30 });
     return `Hello, ${to}!`
 }
 
-await Within({ sec: 29 }, HelloLater)
+await within({ sec: 29 }, HelloLater)
     .catch(e => console.error(e))
 
 // 29 seconds later...
 // > "Timeout: 29000ms"
 
-await Within({ sec: 31 }, HelloLater)
+await within({ sec: 31 }, HelloLater)
     .then(e => console.log(e))
 
 // 30 seconds later...
@@ -225,25 +225,25 @@ await Within({ sec: 31 }, HelloLater)
 
 </br>
 
-<code>&nbsp;<b>Within</b>(defer: <b><i>Amount</i></b>, timeout: <b><i>Amount</i></b>, awaiting: <b><i>Promisable\<<i>T</i>\></i></b>): <b>Promise\<<i>T</i>\></b></b>&nbsp;</code>
+<code>&nbsp;<b>within</b>(defer: <b><i>Amount</i></b>, timeout: <b><i>Amount</i></b>, awaiting: <b><i>Promisable\<<i>T</i>\></i></b>): <b>Promise\<<i>T</i>\></b></b>&nbsp;</code>
 
 *Resolves `awaiting` only after `defer` has elapsed, but only if `timeout` has not.* 
 
-> Behaves exactly as `Atleast(defer, Within(timeout, awaiting))`
+> Behaves exactly as `atleast(defer, within(timeout, awaiting))`
 
 ```js
 async function littleOverAMinute(){
-    await Sleep({ sec: 61 });
+    await sleep({ sec: 61 });
     return "foobar"
 }
 
-await Within({ sec: 35 }, { sec: 60 }, littleOverAMinute)
+await within({ sec: 35 }, { sec: 60 }, littleOverAMinute)
     .catch(e => console.error(e))
 
 // 60 seconds later...
 // > "Timeout: 60000ms"
 
-await Within({ sec: 31 })
+await within({ sec: 31 })
     .catch(e => console.log(e))
 
 // 35 seconds later...

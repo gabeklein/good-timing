@@ -38,7 +38,7 @@ interface TimeDefinition {
 
 export type Amount = number | TimeDefinition;
 
-export function TimeIn(time: TimeDefinition): number {
+export function timeIn(time: TimeDefinition): number {
     let milliseconds = 0;
 
     for(const type in time)

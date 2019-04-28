@@ -1,18 +1,18 @@
-import { Amount, TimeIn } from "./units";
+import { Amount, timeIn } from "./units";
 
 type PromiseExecutor<T> = (
     resolve: (value: T | PromiseLike<T> | undefined) => void, 
     reject?: (reason: any) => void
 ) => never;
 
-function Sleep(duration: Amount): Promise<number>;
-function Sleep<CallbackArguments extends any[]>(
+function sleep(duration: Amount): Promise<number>;
+function sleep<CallbackArguments extends any[]>(
     duration: Amount, 
     callback: (...args: CallbackArguments) => any, 
     ...args: CallbackArguments
 ): void;
 
-function Sleep(
+function sleep(
     duration: Amount, 
     callback?: Function){
 
@@ -25,7 +25,7 @@ function Sleep(
     }
 
     if(typeof duration !== "number")
-        duration = TimeIn(duration);
+        duration = timeIn(duration);
 
     if(!callback)
         promise = new Promise(resolve => {
@@ -38,14 +38,14 @@ function Sleep(
 
 type ThenDeferHandler = <T>(value: T) => Promise<T>;
 
-function Defer(time: Amount): ThenDeferHandler {
-    return (resolution) => Sleep(time).then(() => resolution)
+function defer(time: Amount): ThenDeferHandler {
+    return (resolution) => sleep(time).then(() => resolution)
 }
 
-function Atleast<T>(by: Amount, promise: Promise<T>) : Promise<T>
-function Atleast<T>(by: Amount, exec: PromiseExecutor<T>) : Promise<T>
+function atleast<T>(by: Amount, promise: Promise<T>) : Promise<T>
+function atleast<T>(by: Amount, exec: PromiseExecutor<T>) : Promise<T>
 
-function Atleast<T>(
+function atleast<T>(
     duration: Amount, 
     deferred: Promise<T> | PromiseExecutor<T>){
 
@@ -53,13 +53,13 @@ function Atleast<T>(
         deferred = new Promise(deferred)
 
     return Promise
-        .all([ deferred, Sleep(duration) ])
+        .all([ deferred, sleep(duration) ])
         .then(([deferred]) => deferred);
 }
 
 function ClampTiming<T>(
-    atleast: number | undefined, 
-    atmost: number, 
+    minimum: number | undefined, 
+    maximum: number, 
     promise: Promise<T>){
 
     let timer: NodeJS.Timeout;
@@ -71,30 +71,30 @@ function ClampTiming<T>(
         new Promise(
             function timeout(_, reject){
                 timer = setTimeout(
-                    () => reject(`timeout: ${atmost}ms`), 
-                    atmost)
+                    () => reject(`timeout: ${maximum}ms`), 
+                    maximum)
             }
         )
     ])
     
-    return atleast && Atleast(atleast, race) || race;
+    return minimum && atleast(minimum, race) || race;
 }
 
-function Within(timeout: Amount): AttemptHandler;
-function Within(defer: Amount, timeout: Amount): AttemptHandler;
-function Within<T>(timeout: Amount, promise?: Promise<T>): Promise<T>
-function Within<T>(timeout: Amount, exec?: PromiseExecutor<T>): Promise<T>
-function Within<T>(defer: Amount, timeout?: Amount, promise?: Promise<T>): Promise<T>
-function Within<T>(defer: Amount, timeout?: Amount, exec?: PromiseExecutor<T>): Promise<T>
+function within(timeout: Amount): AttemptHandler;
+function within(defer: Amount, timeout: Amount): AttemptHandler;
+function within<T>(timeout: Amount, promise?: Promise<T>): Promise<T>
+function within<T>(timeout: Amount, exec?: PromiseExecutor<T>): Promise<T>
+function within<T>(defer: Amount, timeout?: Amount, promise?: Promise<T>): Promise<T>
+function within<T>(defer: Amount, timeout?: Amount, exec?: PromiseExecutor<T>): Promise<T>
 
-function Within<T>(
+function within<T>(
     t1?: Amount, 
     t2?: Amount | typeof task, 
     task?: Promise<T> | PromiseExecutor<T> ){
 
     if(!t1) throw new Error("Needs atleast a timeout");
     else if(typeof t1 != "number")
-        t1 = TimeIn(t1)
+        t1 = timeIn(t1)
 
     if(typeof t2 == "function" || t2 instanceof Promise || t2 == undefined){
         task = t2;
@@ -103,7 +103,7 @@ function Within<T>(
     }   
     
     else if(typeof t2 == "object")
-        t2 = TimeIn(t2)
+        t2 = timeIn(t2)
 
     if(task === undefined)
         return new AttemptHandler(t1, t2);
@@ -182,4 +182,4 @@ class Timer extends Promise<void> {
     }
 }
 
-export { Within, Sleep, Atleast, Defer, Timer, TimeIn };
+export { within, sleep, atleast, defer, timeIn, Timer };
