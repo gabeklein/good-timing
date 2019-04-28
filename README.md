@@ -61,18 +61,17 @@ While all helpers can accept a number of milliseconds, a better way to define du
 
 <br/>
 
-###  Amount
-Refers to anywhere `TimeDefinition` or `number` of milliseconds where interchangeable.
-
-<br/>
-
 ###  PromiseExecutor
 
 A function containing asyncronous operation. 
 > Equivalent to that consumed by `new Promise()`
 
-
 <code>&nbsp;(resolve: <b><i>(value) => void</i></b>), reject: <b><i>(reason) => void)</i></b>: <b><i>void</i></b>&nbsp;</code>
+
+<br/>
+
+###  Amount
+Refers to anywhere `TimeDefinition` or `number` of milliseconds where interchangeable.
 
 <br/>
 
