@@ -9,7 +9,6 @@
  
 <p align="center">
   <a href="https://www.npmjs.com/package/good-timing"><img alt="NPM" src="https://img.shields.io/npm/v/good-timing.svg"></a>
-  <a href=""><img alt="Build" src="https://shields-staging.herokuapp.com/npm/types/good-timing.svg"></a>
 </p>
 
 ## Quick Start
@@ -25,7 +24,7 @@ npm install --save good-timing
 > Import what you need
 
 ```js
-import { TimeIn, Between, Sleep, Atleast, Defer, Within, Timer } from "good-timing";
+import { TimeIn, Between, Sleep, Atleast, Defer, Within } from "good-timing";
 ```
 
 <br/>
