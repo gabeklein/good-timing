@@ -210,13 +210,13 @@ async function HelloLater(to: string){
     return `Hello, ${to}!`
 }
 
-await within({ sec: 29 }, HelloLater)
+await within({ sec: 29 }, HelloLater())
     .catch(e => console.error(e))
 
 // 29 seconds later...
 // > "Timeout: 29000ms"
 
-await within({ sec: 31 }, HelloLater)
+await within({ sec: 31 }, HelloLater())
     .then(e => console.log(e))
 
 // 30 seconds later...
@@ -232,22 +232,22 @@ await within({ sec: 31 }, HelloLater)
 > Behaves exactly as `atleast(defer, within(timeout, awaiting))`
 
 ```js
-async function littleOverAMinute(){
-    await sleep({ sec: 61 });
+async function justAMinute(){
+    await sleep({ sec: 60 });
     return "foobar"
 }
 
-await within({ sec: 35 }, { sec: 60 }, littleOverAMinute)
+await within({ sec: 35 }, { sec: 60 }, justAMinute())
     .catch(e => console.error(e))
 
 // 60 seconds later...
 // > "Timeout: 60000ms"
 
-await within({ sec: 31 })
+await within({ sec: 31 }, { sec: 62 }, justAMinute())
     .catch(e => console.log(e))
 
-// 35 seconds later...
-// > 35000
+// 61 seconds later...
+// > 61000
 ```
 
 <br/>
