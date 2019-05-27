@@ -8,15 +8,10 @@ export default {
     format: 'cjs',
     exports: "named"
   },
-  external: [ "@babel/types", "crypto" ],
   plugins: [
     typescript({
       transpileOnly: true
     }),
     commonjs()
-  ],
-  onwarn: (message, warn) => {
-    if(message.code !== "CIRCULAR_DEPENDENCY")
-      warn(message);
-  }
+  ]
 }
