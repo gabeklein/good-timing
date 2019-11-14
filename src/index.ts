@@ -182,4 +182,4 @@ class Timer extends Promise<void> {
     }
 }
 
-export { within, sleep, atleast, defer, timeIn, Timer };
+export { within, sleep, sleep as after, atleast, defer, timeIn, Timer };
