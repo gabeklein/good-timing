@@ -1,7 +1,7 @@
 type PromiseExecutor<T> = (
     resolve: (value: T | PromiseLike<T> | undefined) => void, 
     reject?: (reason: any) => void
-) => never;
+) => void;
 
 type Amount = number | TimeDefinition;
 
