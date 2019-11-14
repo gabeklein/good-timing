@@ -12,7 +12,9 @@
     "build": "rollup --config",
     "watch": "rollup --config --watch --sourcemap",
     "prebuild": "rm -rf lib",
-    "prepare": "npm run build"
+    "postversion": "npm publish",
+    "version": "npm run build",
+    "postpublish": "git push; git push --tags"
   },
   "license": "MIT",
   "files": [
