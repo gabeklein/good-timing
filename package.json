@@ -1,6 +1,6 @@
 {
   "name": "good-timing",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Abstractions for easy timing composition with promise support.",
   "main": "lib/index.js",
   "types": "index.d.ts",
