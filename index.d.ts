@@ -137,6 +137,7 @@ declare class Timer extends Promise<void> {
 
 export {
     timeIn,
+    atleast,
     sleep,
     sleep as after,
     defer,
